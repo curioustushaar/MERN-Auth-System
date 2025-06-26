@@ -30,10 +30,10 @@ This is a full-stack **User Authentication System** built with the **MERN stack 
 
 ### Backend Setup:
 ```bash
-cd backend
+cd server
 npm install
 npm run dev
-[-=0
+
 
 
 # Create a .env file:
