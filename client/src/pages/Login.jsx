@@ -3,57 +3,55 @@ import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
-import {toast} from 'react-toastify'
+import { toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
-  const {backendUrl ,setIsLoggedin , getUserData} = useContext(AppContext)
+  const { backendUrl, setIsLoggedin, getUserData } = useContext(AppContext);
 
   const [state, setState] = useState("Sign Up");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-
   const onSubmitHandler = async (e) => {
-  try {
-    e.preventDefault();
-    axios.defaults.withCredentials = true;
+    try {
+      e.preventDefault();
+      axios.defaults.withCredentials = true;
 
-    if (state === "Sign Up") {
-      const { data } = await axios.post(backendUrl + "/api/auth/register", {
-        name,
-        email,
-        password,
-      });
+      if (state === "Sign Up") {
+        const { data } = await axios.post(backendUrl + "/api/auth/register", {
+          name,
+          email,
+          password,
+        });
 
-      if (data.success) {
-        setIsLoggedin(true);
-        await getUserData();
-        navigate("/");
+        if (data.success) {
+          setIsLoggedin(true);
+          await getUserData();
+          navigate("/");
+        } else {
+          toast.error(data.message);
+        }
       } else {
-        toast.error(data.message);
-      }
-    } else {
-      const { data } = await axios.post(backendUrl + "/api/auth/login", {
-        email,
-        password,
-      });
+        const { data } = await axios.post(backendUrl + "/api/auth/login", {
+          email,
+          password,
+        });
 
-      if (data.success) {
-        setIsLoggedin(true);
-        await getUserData();
-        navigate("/");
-      } else {
-        toast.error(data.message);
+        if (data.success) {
+          setIsLoggedin(true);
+          await getUserData();
+          navigate("/");
+        } else {
+          toast.error(data.message);
+        }
       }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
-  } catch (error) {
-    console.log(error);
-    toast.error(error.response?.data?.message || "Something went wrong");
-  }
-};
-
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen px-6 sm:px-0 bg-gradient-to-br from-blue-200 to-purple-400">
@@ -111,7 +109,10 @@ const Login = () => {
               required
             />
           </div>
-          <p onClick={() => navigate('/reset-password')} className="mb-4 text-indigo-500 cursor-pointer">
+          <p
+            onClick={() => navigate("/reset-password")}
+            className="mb-4 text-indigo-500 cursor-pointer"
+          >
             Forgot password?
           </p>
 
